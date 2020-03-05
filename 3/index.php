@@ -1,6 +1,8 @@
 <?php
 readfile('index.html');
-require "RandomSort.php";
 
-$h = new RandomSort($_POST['code']);
-$h->run();
+if ($_POST['code']!=null) {
+    require "RandomSort.php";
+    $h = new RandomSort($_POST['code']);
+    $h->run();
+}

@@ -12,9 +12,6 @@ class RandomSort
     {
         $this->code = $code;
         $this->array = explode(PHP_EOL, $_POST['code']);
-
-
-
     }
 
     public function run()
@@ -38,18 +35,26 @@ class RandomSort
     private function splitText($array)
     {
         $str = implode(" ", (array)$array);
-
-        $this->resultWithoutSort[$str] = $array[1];
+        array_push($this->resultWithoutSort, $str);
     }
+
+
 
 
     private function sortArraySecondElem($array)
     {
-        asort($array);
-        $keys = array_keys($array);
-           for ($i=0;$i<count($keys);$i++){
-               echo "$keys[$i] <br/>";
-           }
+        function cmp($a, $b)
+        {
+            if ($a[1] == $b[1]) {
+                return 0;
+            }
+            return ($a[1] < $b[1]) ? -1 : 1;
+        }
+
+        uasort($array, 'cmp');
+        for ($i = 0; $i < count($array); $i++) {
+            echo "$array[$i] <br/>";
+        }
     }
 
 }
