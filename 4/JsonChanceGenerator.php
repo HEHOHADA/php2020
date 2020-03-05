@@ -25,7 +25,8 @@ class JsonChanceGenerator
             }
             $this->sum += (int)$weight;
             unset($words[count($words) - 1]);
-            array_push($this->jsonResult, $this->toJson(implode(" ", $words), (int)$weight, "text ${$i}", "weight"));
+            $lineNumber = $i + 1;
+            array_push($this->jsonResult, $this->toJson(implode(" ", $words), (int)$weight, "text $lineNumber", "weight"));
         }
         for ($i = 0; $i < count($this->jsonResult); $i++) {
             $this->jsonResult[$i]["probability"] = $this->jsonResult[$i]["weight"] / $this->sum;
@@ -47,8 +48,8 @@ class JsonChanceGenerator
 
     private function generator()
     {
-        $rnd = mt_rand(0, count($this->jsonResult) - 1);
-        return $this->jsonResult[$rnd]["text ${$rnd}"];
+        $rnd = mt_rand(1, count($this->jsonResult));
+        return $this->jsonResult[$rnd - 1]["text $rnd"];
     }
 
     private function checkCorrect()
@@ -56,7 +57,8 @@ class JsonChanceGenerator
         $arrayOfChance = [];
         for ($i = 0; $i < 10000; $i++) {
             $json = $this->generator();
-            if ($arrayOfChance[$json] == null) {
+            $key = array_key_exists($json, $arrayOfChance);
+            if (!$key) {
                 $arrayOfChance[$json] = 0;
             }
             $arrayOfChance[$json]++;
