@@ -8,6 +8,9 @@ class JsonChanceGenerator
     private int $sum = 0;
     private array $jsonResult = [];
     private array $resultGenerator = [];
+    private array $someArr = [];
+    private int $sumChance = 0;
+    private int $sumChanceDivided = 0;
 
     public function __construct($text)
     {
@@ -26,13 +29,14 @@ class JsonChanceGenerator
             $this->sum += (int)$weight;
             unset($words[count($words) - 1]);
             $lineNumber = $i + 1;
-            array_push($this->jsonResult, $this->toJson(implode(" ", $words), (int)$weight, "text $lineNumber", "weight"));
+            array_push($this->jsonResult, $this->toJson(implode(" ", $words), (int)$weight, "text", "weight"));
         }
         for ($i = 0; $i < count($this->jsonResult); $i++) {
             $this->jsonResult[$i]["probability"] = $this->jsonResult[$i]["weight"] / $this->sum;
         }
 
         echo json_encode($this->toJson($this->sum, $this->jsonResult, "sum", "data"), JSON_UNESCAPED_UNICODE) . "<br/>";
+        $this->round_random($this->sum);
         $this->checkCorrect();
 
         echo json_encode($this->resultGenerator, JSON_UNESCAPED_UNICODE) . "<br/>";
@@ -46,10 +50,41 @@ class JsonChanceGenerator
         return $json;
     }
 
+    private function round_random($numb)
+    {
+        $countOfSum = 0;
+        while ($numb > 1) {
+            $countOfSum++;
+            $numb = $numb / 10;
+        }
+
+        $this->sumChance = pow(10, $countOfSum);
+        $this->sumChanceDivided = $this->sumChance / $this->sum;
+
+        for ($i = 0; $i < count($this->jsonResult); $i++) {
+            if ($i == 0) {
+                $this->someArr[$i] = $this->jsonResult[$i]["weight"] * $this->sumChanceDivided;
+            } else
+                $this->someArr[$i] = $this->jsonResult[$i]["weight"] * $this->sumChanceDivided + $this->someArr[$i - 1];
+
+        }
+    }
+
+
     private function generator()
     {
-        $rnd = mt_rand(1, count($this->jsonResult));
-        return $this->jsonResult[$rnd - 1]["text $rnd"];
+        $rnd = mt_rand(0, $this->sumChance);
+        $index = 0;
+
+        foreach ($this->someArr as $item => $value) {
+            if ($value <= $rnd)
+                $index++;
+        }
+        if($index>=count($this->someArr)){
+            $index--;
+        }
+
+        return $this->jsonResult[$index]["text"];
     }
 
     private function checkCorrect()
