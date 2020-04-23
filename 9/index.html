@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+<form action="index.php" method="post">
+    <label>
+        <textarea name="text"></textarea>
+    </label>
+
+    <div>
+        <input name="log" type="radio" value="browser">В браузер
+    </div>
+    <div><input name="log" type="radio" value="file">В файл : <input name="file" type="text" value="index.txt"></div>
+    Параметры логов:
+    <select name="format">
+        <option value="1">С датой и временем</option>
+        <option value="2">Со временем</option>
+        <option value="3">Без даты и времени</option>
+    </select>
+    <button type="submit">отправить</button>
+</form>
+</body>
+</html>
