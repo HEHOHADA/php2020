@@ -2,7 +2,6 @@
 
 namespace Controller;
 
-use DateTime;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
