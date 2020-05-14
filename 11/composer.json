@@ -1,0 +1,13 @@
+{
+  "name": "bulat/11",
+  "authors": [
+    {
+      "name": "Bulat",
+      "email": "bulat5512@yandex.ru"
+    }
+  ],
+  "require": {
+    "psr/log": "^1.1",
+    "ext-json": "*"
+  }
+}
