@@ -1,24 +1,20 @@
 <?php
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
-spl_autoload_register(function ($className) {
-    include $className . ".php";
-});
+spl_autoload_register();
 
 $exceptionGenerator = new GeneratorEx();
 
 try {
     $exceptionGenerator->generate();
 } catch (\Exceptions\FifthException $exception) {
-    echo $exception->__toString();
+    echo 'Exceptions 1 ';
 } catch (\Exceptions\FourthException $exception) {
-    echo $exception->__toString();
+    echo 'Exceptions 2 ';
 } catch (\Exceptions\ThirdException $exception) {
-    echo $exception->__toString();
+    echo 'Exceptions 3 ';
 } catch (\Exceptions\SecondException $exception) {
-    echo $exception->__toString();
+    echo 'Exceptions 4 ';
 } catch (\Exceptions\FirstException $exception) {
-    echo $exception->__toString();
-} catch (Exception $e) {
-    echo 'Something went wrong';
+    echo 'Exceptions 5 ';
 }
