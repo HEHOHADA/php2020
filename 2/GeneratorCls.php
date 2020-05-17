@@ -1,7 +1,7 @@
 <?php
 
 
-class generatorClass
+class GeneratorCls
 {
     public $input = null;
     public $result = null;
