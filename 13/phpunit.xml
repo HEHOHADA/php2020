@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit bootstrap="vendor/autoload.php">
+    <testsuite name="Complex">
+        <direcroty suffix="spec.php">
+            ./ComplexNumber
+        </direcroty>
+    </testsuite>
+</phpunit>
