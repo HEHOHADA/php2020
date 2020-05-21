@@ -10,49 +10,90 @@ class ComplexNumberTest extends PHPUnit\Framework\TestCase
 
     private ComplexNumber $_firstComplexNumber;
     private ComplexNumber $_secondComplexNumber;
-    private int $_rnd;
-    private int $_rnd1;
-    private int $_rnd2;
-    private int $_rnd3;
 
-    public function beforeEach()
+
+    public function beforeEach($first, $second, $third, $fourth)
     {
-        $this->_rnd = rand(1, 20);
-        $this->_rnd1 = rand(2, 30);
-        $this->_rnd2 = rand(3, 40);
-        $this->_rnd3 = rand(4, 50);
-        $this->_firstComplexNumber = new ComplexNumber($this->_rnd, $this->_rnd1);
-        $this->_secondComplexNumber = new ComplexNumber($this->_rnd2, $this->_rnd3);
+
+        $this->_firstComplexNumber = new ComplexNumber($first, $second);
+        $this->_secondComplexNumber = new ComplexNumber($third, $fourth);
     }
 
     public function testAdd()
     {
-        $this->beforeEach();
+        $this->beforeEach(1, 2, 3, 4);
         $result = $this->_firstComplexNumber->add($this->_secondComplexNumber);
-        $this->assertEquals($this->_rnd + $this->_rnd2, $result->real);
-        $this->assertEquals($this->_rnd1 + $this->_rnd3, $result->unreal);
+        $this->assertEquals(1 + 3, $result->real);
+        $this->assertEquals(2 + 4, $result->unreal);
+    }
+
+    public function testNegativeAdd()
+    {
+        $this->beforeEach(-1, -2, -3, -4);
+        $result = $this->_firstComplexNumber->add($this->_secondComplexNumber);
+        $this->assertEquals((-1) + (-3), $result->real);
+        $this->assertEquals((-2) + (-4), $result->unreal);
+    }
+
+    public function testFractionalAdd()
+    {
+        $this->beforeEach(-1 / 2, -2 / 3, -3 / 4, -4 / 5);
+        $result = $this->_firstComplexNumber->add($this->_secondComplexNumber);
+        $this->assertEquals((-1 / 2) + (-3 / 4), $result->real);
+        $this->assertEquals((-2 / 3) + (-4 / 5), $result->unreal);
     }
 
     public function testSub()
     {
-        $this->beforeEach();
+        $this->beforeEach(1, 2, 3, 4);
         $result = $this->_firstComplexNumber->sub($this->_secondComplexNumber);
-        $this->assertEquals($this->_rnd - $this->_rnd2, $result->real);
-        $this->assertEquals($this->_rnd1 - $this->_rnd3, $result->unreal);
+        $this->assertEquals(1 - 3, $result->real);
+        $this->assertEquals(2 - 4, $result->unreal);
+    }
+
+    public function testFractionalSub()
+    {
+        $this->beforeEach(-1 / 2, -2 / 3, -3 / 4, -4 / 5);
+        $result = $this->_firstComplexNumber->sub($this->_secondComplexNumber);
+        $this->assertEquals((-1 / 2) - (-3 / 4), $result->real);
+        $this->assertEquals((-2 / 3) - (-4 / 5), $result->unreal);
+    }
+
+    public function testNegativeSub()
+    {
+        $this->beforeEach(-1, -2, -3, -4);
+        $result = $this->_firstComplexNumber->sub($this->_secondComplexNumber);
+        $this->assertEquals((-1) - (-3), $result->real);
+        $this->assertEquals((-2) - (-4), $result->unreal);
     }
 
     public function testMulti()
     {
-        $this->beforeEach();
+        $this->beforeEach(1, 2, 3, 4);
         $result = $this->_firstComplexNumber->multi($this->_secondComplexNumber);
-        $this->assertEquals($this->_rnd * $this->_rnd2 - $this->_rnd1 * $this->_rnd3, $result->real);
-        $this->assertEquals($this->_rnd * $this->_rnd3 + $this->_rnd2 * $this->_rnd1, $result->unreal);
+        $this->assertEquals(1 * 3 - 2 * 4, $result->real);
+        $this->assertEquals(1 * 4 + 3 * 2, $result->unreal);
+    }
+
+    public function testFractionalMulti()
+    {
+        $this->beforeEach(-1 / 2, -2 / 3, -3 / 4, -4 / 5);
+        $result = $this->_firstComplexNumber->multi($this->_secondComplexNumber);
+        $this->assertEquals((-0.5) * (-0.75) - (-2 / 3) * (-4 / 5), $result->real);
+        $this->assertEquals((-0.5) * (-4 / 5) + (-0.75) * (-2 / 3), $result->unreal);
+    }
+
+    public function testNegativeMulti()
+    {
+        $this->beforeEach(-1, -2, -3, -4);
+        $result = $this->_firstComplexNumber->multi($this->_secondComplexNumber);
+        $this->assertEquals(1 * 3 - 2 * 4, $result->real);
+        $this->assertEquals(1 * 4 + 3 * 2, $result->unreal);
     }
 
     public function testDiv()
     {
-        $this->_firstComplexNumber = new ComplexNumber(-2, 1);
-        $this->_secondComplexNumber = new ComplexNumber(1, -1);
+        $this->beforeEach(-2, 1, 1, -1);
         $result = $this->_firstComplexNumber->div($this->_secondComplexNumber);
         $this->assertEquals((-3 / 2), $result->real);
         $this->assertEquals((-1 / 2), $result->unreal);
@@ -60,30 +101,44 @@ class ComplexNumberTest extends PHPUnit\Framework\TestCase
 
     public function testAbs()
     {
-        $this->beforeEach();
+        $this->beforeEach(1, 2, 3, 4);
         $this->_firstComplexNumber = new ComplexNumber(13, 0);
         $result1 = $this->_firstComplexNumber->abs();
         $result2 = $this->_secondComplexNumber->abs();
         $this->assertEquals(13, $result1);
-        $this->assertEquals(sqrt($this->_rnd2 * $this->_rnd2 + $this->_rnd3 * $this->_rnd3), $result2);
+        $this->assertEquals(sqrt(3 * 3 + 4 * 4), $result2);
     }
 
     public function testDivNull()
     {
         $this->expectException("Exception");
-        $this->beforeEach();
+        $this->beforeEach(1, 2, 3, 4);
         $this->_secondComplexNumber = new ComplexNumber(0, 0);
-        $this->_secondComplexNumber->div($this->_firstComplexNumber);
-        $this->expectExceptionCode(100);
-        $this->expectExceptionMessage("Cannot divide by zero");
+        $this->_firstComplexNumber->div($this->_secondComplexNumber);
+    }
+
+    public function testDivNegativeNull()
+    {
+        $this->expectException("Exception");
+        $this->beforeEach(-1, -2, -3, -4);
+        $this->_secondComplexNumber = new ComplexNumber(0, 0);
+        $this->_firstComplexNumber->div($this->_secondComplexNumber);
     }
 
     public function testString()
     {
-        $this->beforeEach();
+        $this->beforeEach(1, 2, 3, 4);
         $result = strval($this->_firstComplexNumber);
-        $sign = $this->_rnd1 > 0 ? "+" : "-";
-        $this->assertEquals($this->_rnd . $sign . $this->_rnd1 . "i", $result);
+        $sign = 2 > 0 ? "+" : "-";
+        $this->assertEquals(1 . $sign . 2 . "i", $result);
+    }
+
+    public function testWithNegativeSecondString()
+    {
+        $this->beforeEach(1, -2, 3, 4);
+        $result = strval($this->_firstComplexNumber);
+        $sign = -2 > 0 ? "+" : "";
+        $this->assertEquals(1 . $sign . -2 . "i", $result);
     }
 
 }

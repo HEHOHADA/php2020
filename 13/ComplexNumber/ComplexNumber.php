@@ -19,7 +19,7 @@ class ComplexNumber
 
     public function __toString()
     {
-        $sing = $this->unreal > 0 ? "+" : "-";
+        $sing = $this->unreal > 0 ? "+" : "";
         return $this->real . $sing . $this->unreal . 'i';
     }
 
